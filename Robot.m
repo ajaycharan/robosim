@@ -11,7 +11,7 @@ classdef Robot < handle
         U = zeros(2,1)  % [v w]
         
         leaders
-        controller = @(robot)robot.U
+        controller = @(robot)robot.U;
     end  % properties public
     
     properties (Access = private)
