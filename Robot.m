@@ -116,21 +116,27 @@ classdef Robot < handle
             w = self.U(2);
         end
         
-        function psi = getPsi(r1, r2)
+        function psi = getPsi(self, leader)
             % self is robot 1, assumed to be leader
             
-            p1 = r1.X(1:2,:);
-            th1 = r1.theta;
+            p1 = leader.X(1:2,:);
+            th1 = leader.theta;
             
             % add on length of robot for p2
-            p2 = r2.X(1:2,:);
-            th2 = r2.theta;
-            p2 = p2 + [cos(th2) -sin(th2); sin(th2) cos(th2)] * [r2.d; 0];
+            p2 = self.X(1:2,:);
+            th2 = self.theta;
+            p2 = p2 + [cos(th2) -sin(th2); sin(th2) cos(th2)] * [self.d; 0];
             
             % vector of psi
             v = p2 - p1;
             beta = atan2(v(2),v(1));
             psi = beta - th1;
+        end
+        
+        function L = getLength(self, leader)
+            p1 = leader.X(1:2,:);
+            p2 = self.X(1:2,:);
+            L = norm(p1 - p2);
         end
         
     end  % methods public

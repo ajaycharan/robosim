@@ -24,7 +24,7 @@ th2 = robot.theta;
 
 % system outputs
 L12 = sqrt((x1-x2)^2 + (y1-y2)^2);
-P12 = leader.getPsi(robot);
+P12 = robot.getPsi(leader);
 
 % desired outputs
 L12_des = robot.control_params(1);
