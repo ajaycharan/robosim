@@ -5,12 +5,20 @@ classdef Simulator < handle
         robots = Robot.empty();
     end
     
+    properties(Access=private)
+        hFigure
+    end
+    
     methods
-        function self = Simulator()
+        function self = Simulator(t_range)
+            hFigure = figure;
+            
             
         end
         
         function simulate(self)
+            
+            
             
         end
         
@@ -26,12 +34,12 @@ classdef Simulator < handle
                 
                 % integrate
                 [T,X] = ode45(@(t,x)Simulator.dynamics(t,x,U), [0 self.t_step], X, options);
-                self.robots(i).X = X(end,:)';
+                self.robots(i).updateState(T(end), X(end,:)');
             end
             
             % perform control
             for i=1:numel(self.robots)
-                self.robots(i).U = self.robots(i).controller( self.robots(i) );
+                self.robots(i).controller( self.robots(i) );
             end
                         
         end        

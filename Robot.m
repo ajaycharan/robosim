@@ -36,13 +36,8 @@ classdef Robot < handle
             self.X = X(:);
         end
         
-        function assignLeaders(self, robots)
-            % Assigns leader robots
-            self.leaders = robots;
-        end
-        
         function plot(self)
-            % Plots robots
+            % Plots robot
             nRobot = numel(self);
             for iRobot = 1:nRobot
                 thisRobot = self(iRobot);
@@ -76,17 +71,6 @@ classdef Robot < handle
                         'YData', lineY);
                 end
             end
-        end
-        
-        function plotHist(self)
-            % TODO
-        end
-        
-        function updateState(self, t, state)
-            % Updates the current state of the robot and append to history
-            self.X = state;
-            self.Thist = [self.Thist t];
-            self.Xhist = [self.Xhist state];
         end
         
         function x = get.x(self)
