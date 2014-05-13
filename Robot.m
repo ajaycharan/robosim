@@ -28,6 +28,8 @@ classdef Robot < handle
         x      % x coordinate
         y      % y coordinate
         theta  % heading angle
+        v      % velocity
+        w      % angular velocity
     end
     
     methods
@@ -104,6 +106,31 @@ classdef Robot < handle
         
         function theta = get.theta(self)
             theta = self.X(3);
+        end
+        
+        function v = get.v(self)
+            v = self.U(1);
+        end
+        
+        function w = get.w(self)
+            w = self.U(2);
+        end
+        
+        function psi = getPsi(r1, r2)
+            % self is robot 1, assumed to be leader
+            
+            p1 = r1.X(1:2,:);
+            th1 = r1.theta;
+            
+            % add on length of robot for p2
+            p2 = r2.X(1:2,:);
+            th2 = r2.theta;
+            p2 = p2 + [cos(th2) -sin(th2); sin(th2) cos(th2)] * [r2.d; 0];
+            
+            % vector of psi
+            v = p2 - p1;
+            beta = atan2(v(2),v(1));
+            psi = beta - th1;
         end
         
     end  % methods public
