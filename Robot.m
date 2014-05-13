@@ -1,4 +1,4 @@
-classdef Simulator < handle
+classdef Robot < handle
 
     properties
     end
