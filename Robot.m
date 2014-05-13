@@ -10,7 +10,10 @@ classdef Robot < handle
         X = zeros(3,1)  % [x y theta]
         U = zeros(2,1)  % [v w]
         
-        leaders
+        Xhist  % state history
+        Thist  % time history
+        
+        leaders  % a list of learder robot
         controller = @(robot)robot.U
     end  % properties public
     
@@ -20,9 +23,9 @@ classdef Robot < handle
     end  % properties private
     
     properties (Dependent = true)
-        x
-        y
-        theta
+        x      % x coordinate
+        y      % y coordinate
+        theta  % heading angle
     end
     
     methods
@@ -33,8 +36,13 @@ classdef Robot < handle
             self.X = X(:);
         end
         
+        function assignLeaders(self, robots)
+            % Assigns leader robots
+            self.leaders = robots;
+        end
+        
         function plot(self)
-            % Plots robot
+            % Plots robots
             nRobot = numel(self);
             for iRobot = 1:nRobot
                 thisRobot = self(iRobot);
@@ -68,6 +76,17 @@ classdef Robot < handle
                         'YData', lineY);
                 end
             end
+        end
+        
+        function plotHist(self)
+            % TODO
+        end
+        
+        function updateState(self, t, state)
+            % Updates the current state of the robot and append to history
+            self.X = state;
+            self.Thist = [self.Thist t];
+            self.Xhist = [self.Xhist state];
         end
         
         function x = get.x(self)
