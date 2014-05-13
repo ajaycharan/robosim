@@ -1,14 +1,14 @@
 classdef Simulator < handle
 
     properties
-        t_step = 0.01;
+        t_step = 0.01;              
         t_max = 0;
         t_cur = 0;
         robots = Robot.empty();
     end
     
     properties(Access=private)
-        hFigure
+        hFigure % figure for simulation
     end
     
     methods
@@ -33,27 +33,23 @@ classdef Simulator < handle
             
             % run simulation
             while self.t_cur < self.t_max
-                [min_pos, max_pos] = self.step();
-                
-                % reshape axes
-                axis([min_pos(1)-1 max_pos(1)+1 min_pos(2)-1 max_pos(2)+1]);
-                
+                self.step();
+              
                 % update all robot plots
                 self.robots.plot();
+                
+                title(sprintf('Simulation time: %.3f', self.t_cur));
+                drawnow;
             end            
         end
         
-        function [min_pos, max_pos] = step(self)
+        function step(self)
             
             % ODE options
             options = odeset('RelTol', 1e-2, 'AbsTol', 1e-4);
             
             t_start = self.t_cur;
             t_final = self.t_cur + self.t_step;
-            
-            % min/max positions
-            min_pos = [ Inf  Inf];
-            max_pos = [-Inf -Inf];
             
             for i=1:numel(self.robots)
                 
@@ -63,9 +59,6 @@ classdef Simulator < handle
                 % integrate
                 [T,X] = ode45(@(t,x)Simulator.dynamics(t,x,U), [t_start t_final], X, options);
                 self.robots(i).updateState(T(end), X(end,:)');
-                
-                min_pos = min(min_pos, [X(1) X(2)]);
-                max_pos = max(max_pos, [X(1) X(2)]);
             end
             self.t_cur = t_final;
             
