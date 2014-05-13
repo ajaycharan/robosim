@@ -1,3 +1,6 @@
+%% ROBOT.m
+% Manage the robot state and store list of leaders
+
 classdef Robot < handle
     
     properties (Constant)

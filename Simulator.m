@@ -1,3 +1,6 @@
+%% SIMULATOR.m
+% Run the simuation using ODE45 and generate plots
+
 classdef Simulator < handle
 
     properties
@@ -30,6 +33,7 @@ classdef Simulator < handle
             hold on;
             grid on;
             set(gca, 'Box', 'On');
+            axis equal;
             
             % run simulation
             while self.t_cur < self.t_max
@@ -68,6 +72,43 @@ classdef Simulator < handle
             end
                         
         end
+        
+        function plot(self)
+            
+            titles = {'x','y','theta'};
+            
+            % x/y plot 
+            figure;
+            for i=1:3
+                subplot(3,1,i);
+                hold on;
+                grid on;
+                for j=1:numel(self.robots)
+                    plot(self.robots(j).Thist, self.robots(j).Xhist(i,:), 'Color',... 
+                        Robot.color(self.robots(j).id,:));
+                end
+                axis tight;
+                xlabel('Time');
+                ylabel(titles{i});
+            end
+            
+            % top-down plot
+            figure;
+            hold on;
+            grid on;
+            for i=1:numel(self.robots)
+                
+                plot(self.robots(i).Xhist(1,:), self.robots(i).Xhist(2,:), 'Color',...
+                    Robot.color(self.robots(i).id,:));
+                
+                plot(self.robots(i).Xhist(1,end), self.robots(i).Xhist(2,end), 'o', 'Color',...
+                    Robot.color(self.robots(i).id,:));
+            end
+            title('2D plot');
+            xlabel('x');
+            ylabel('y');
+            
+        end
     end
     
     methods(Static)
@@ -80,6 +121,5 @@ classdef Simulator < handle
             Xdot(3) = U(2);
         end
         
-    end
-    
+    end 
 end
