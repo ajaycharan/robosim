@@ -10,8 +10,11 @@ classdef Robot < handle
         X = zeros(3,1)  % [x y theta]
         U = zeros(2,1)  % [v w]
         
-        leaders
-        controller = @(robot)robot.U;
+        Xhist  % state history
+        Thist  % time history
+        
+        leaders  % a list of learder robot
+        controller = @(robot)robot.U
     end  % properties public
     
     properties (Access = private)
@@ -20,9 +23,9 @@ classdef Robot < handle
     end  % properties private
     
     properties (Dependent = true)
-        x
-        y
-        theta
+        x      % x coordinate
+        y      % y coordinate
+        theta  % heading angle
     end
     
     methods
