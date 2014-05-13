@@ -1,7 +1,8 @@
 classdef Robot < handle
     
     properties (Constant)
-        length = 2
+        length = 0.3
+        d = 0.15
         color = lines(3)
     end
     
@@ -15,6 +16,7 @@ classdef Robot < handle
         
         leaders  % a list of learder robot
         controller = @(time, robot) robot.U
+        control_params
     end  % properties public
     
     properties (Access = private)
@@ -36,8 +38,16 @@ classdef Robot < handle
             self.X = X(:);
         end
         
-        function assignLeader(self)
-            
+        function assignLeader(self, robots, des1, des2)
+            % Assigns leaders (0 or 1 or 2) to 
+            self.leaders = robots;
+            nRobots = numel(robots);
+            if nRobots == 1
+                self.controller = @ControllerLP;
+            elseif numel(robots) == 2
+                self.controller = @ControllerLL;
+            end
+            self.control_params = [des1 des2];
         end
         
         function updateState(self, t, state)
