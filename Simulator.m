@@ -73,6 +73,7 @@ classdef Simulator < handle
     methods(Static)
        
         function Xdot = dynamics(~,X,U)
+            % simple dynamics for non-holonomic robot
             Xdot = zeros(3,1);
             Xdot(1) = U(1) * cos(X(3));
             Xdot(2) = U(1) * sin(X(3));
