@@ -14,7 +14,7 @@ classdef Robot < handle
         Thist  % time history
         
         leaders  % a list of learder robot
-        controller = @(robot)robot.U
+        controller = @(time, robot) robot.U
     end  % properties public
     
     properties (Access = private)
@@ -34,6 +34,17 @@ classdef Robot < handle
             % Constructor of Robot class
             self.id = id;
             self.X = X(:);
+        end
+        
+        function assignLeader(self)
+            
+        end
+        
+        function updateState(self, t, state)
+            % updates state of the robot and append to history
+            self.X = state;
+            self.Xhist = [self.Xhist, self.X];
+            self.Thist = [self.Thist, t];
         end
         
         function plot(self)
